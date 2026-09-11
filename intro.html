@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>practice02</title>
+    <style>
+        body {
+            font-family: "微软雅黑", Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #333;
+            line-height: 1.8;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .info {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+        .task { margin-bottom: 50px; }
+        .task h2 {
+            font-size: 18px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        .task h3 {
+            font-size: 16px;
+            color: #555;
+            margin: 20px 0 10px;
+        }
+        p { margin: 10px 0; font-size: 15px; }
+        pre {
+            padding: 5px 0;
+            font-size: 14px;
+            line-height: 1.6;
+            font-family: "Cascadia Code", "Courier New", monospace;
+            white-space: pre-wrap;
+        }
+        .commit {
+            padding: 0;
+            font-family: monospace;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>practice02</h1>
+
+    <div class="task">
+        <h2>任务一：账号注册 / Git 安装 / 用户配置</h2>
+        <p>注册 GitHub 账号，安装 Git 客户端，并配置全局用户名和邮箱。</p>
+        <pre>git config --global user.name "Fangdeyip"
+git config --global user.email "2170755776@qq.com"
+git config --list</pre>
+        <p>已配置完成，Git 客户端正常运行。</p>
+    </div>
+
+    <div class="task">
+        <h2>任务二：创建仓库并首次提交</h2>
+        <p>在远程 Git 服务器创建空仓库，本地初始化并推送首次提交。</p>
+        <pre>git remote add origin &lt;REMOTE_URL&gt;
+echo "# test" > README.md
+git add README.md
+git commit -m "first commit"
+git log --oneline</pre>
+        <div class="commit">df138b5 first commit</div>
+        <img src="screenshot/1.png" alt="首次提交">
+    </div>
+
+    <div class="task">
+        <h2>任务三：创建 dev 分支并提交新文件</h2>
+        <p>基于 main 分支创建 dev 分支，在 dev 分支上新增 notes.txt 并提交。</p>
+        <pre>git checkout -b dev
+echo "dev notes" > notes.txt
+git add notes.txt
+git commit -m "add notes"
+git log --oneline --all --graph</pre>
+        <div class="commit">273b7d4 add notes (HEAD -> dev)
+df138b5 first commit (main)</div>
+        <img src="screenshot/2.png" alt="dev 分支提交">
+    </div>
+
+    <div class="task">
+        <h2>任务四：合并 dev 分支到 main</h2>
+        <p>切换到 main 分支，将 dev 合并进来。</p>
+        <pre>git checkout main
+git merge dev
+git log --oneline --all --graph</pre>
+        <div class="commit">273b7d4 add notes (main, dev)
+df138b5 first commit</div>
+        <p>Fast-forward 快进合并，main 与 dev 指向同一提交。</p>
+        <img src="screenshot/3.png" alt="合并 dev 到 main">
+    </div>
+
+    <div class="task">
+        <h2>任务五：模拟合并冲突并手动解决</h2>
+
+        <h3>① 制造冲突</h3>
+        <pre>git checkout main
+echo "version in main" > conflict.txt
+git add conflict.txt
+git commit -m "edit in main"
+
+git checkout dev
+echo "version in dev" > conflict.txt
+git add conflict.txt
+git commit -m "edit in dev"
+
+git checkout main
+git merge dev</pre>
+        <p>输出：CONFLICT (add/add): Merge conflict in conflict.txt</p>
+        <img src="screenshot/4.png" alt="冲突发生">
+
+        <h3>② 解决冲突</h3>
+        <pre>echo "merged result" > conflict.txt
+git add conflict.txt
+git commit -m "resolve conflict"
+git log --oneline --all --graph</pre>
+        <div class="commit">a74d711 resolve conflict (main)
+006554a edit in dev (dev)
+364eae3 edit in main
+273b7d4 add notes
+df138b5 first commit</div>
+        <img src="screenshot/5.png" alt="冲突解决后">
+    </div>
+
+    <div class="task">
+        <h2>任务六：推送至远程仓库</h2>
+        <p>将本地 main 与 dev 分支推送到远程 Git 服务器。</p>
+        <pre>git push -u origin main --force
+git push -u origin dev --force
+git branch -a</pre>
+        <p>远程仓库地址 &lt;REMOTE_URL&gt; 等待老师提供后替换。</p>
+    </div>
+
+    <div class="task">
+        <h2>实验总结</h2>
+        <p>本次实验掌握了 Git 全局配置与远程仓库关联，理解 dev/main 双分支协作流程，实践 Fast-forward 快进合并与冲突的制造及解决，最后成功推送至远程服务器。</p>
+    </div>
+
+</body>
+</html>
