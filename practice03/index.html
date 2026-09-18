@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数字逻辑可视化演示</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ========================================================
+     页面顶部标题栏
+     ======================================================== -->
+<header class="page-header">
+  <h1>
+    数字逻辑可视化演示
+    <span>布尔表达式 · 真值表 · 波形图 · 卡诺图 · 电路图</span>
+  </h1>
+  <nav class="page-nav">
+    <a href="intro.html">练习小结 →</a>
+  </nav>
+</header>
+
+<!-- ========================================================
+     主容器
+     ======================================================== -->
+<main class="container">
+
+  <!-- 表达式输入区 -->
+  <section class="input-section" aria-label="表达式输入">
+    <div class="input-row">
+      <span class="expr-label">F =</span>
+      <input
+        type="text"
+        id="exprInput"
+        placeholder="输入布尔表达式，例如 A''B + AB''"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <button class="btn" id="btnUpdate" title="解析表达式">解析</button>
+    </div>
+
+    <!-- 预设按钮 -->
+    <div class="presets-row" aria-label="预设示例">
+      <span class="presets-label">预设：</span>
+      <!-- 动态生成，见 JS -->
+    </div>
+
+    <!-- 错误提示 -->
+    <div class="error-msg" id="errorMsg" role="alert"></div>
+  </section>
+
+  <!-- 视图区 -->
+  <div class="views-grid">
+
+    <!-- ① 真值表 -->
+    <section class="view-panel truthtable-panel" aria-label="真值表">
+      <div class="panel-title">真值表</div>
+      <div style="overflow-x:auto;">
+        <table id="truthTable" aria-label="真值表">
+          <thead id="truthTableHead">
+            <!-- 动态生成：变量列 + 输出列 -->
+          </thead>
+          <tbody id="truthTableBody">
+            <!-- 动态生成 -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ② 表达式显示 -->
+    <section class="view-panel expr-display-panel" aria-label="表达式显示">
+      <div class="panel-title">表达式</div>
+      <div id="exprDisplay" aria-label="当前表达式">—</div>
+      <div id="simplifiedDisplay" aria-label="化简结果" style="display:none"></div>
+      <div id="primeImplicantsList" aria-label="素蕴含"></div>
+    </section>
+
+    <!-- ③ 波形图 -->
+    <section class="view-panel waveform-panel" aria-label="波形图">
+      <div class="panel-title">波形图</div>
+      <div class="wave-container" role="img" aria-label="时序波形图">
+        <canvas id="waveCanvas" aria-hidden="true"></canvas>
+      </div>
+    </section>
+
+    <!-- ④ 卡诺图 -->
+    <section class="view-panel kmap-panel" aria-label="卡诺图">
+      <div class="panel-title">卡诺图</div>
+      <table id="kmapTable" aria-label="卡诺图" style="border-collapse:collapse;margin:.4rem auto 0">
+        <thead id="kmapHead">
+          <!-- 动态生成 -->
+        </thead>
+        <tbody id="kmapBody">
+          <!-- 动态生成 -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ⑤ 电路图 -->
+    <section class="view-panel circuit-panel" aria-label="逻辑电路图">
+      <div class="panel-title">逻辑电路图</div>
+      <svg id="circuitSvg" xmlns="http://www.w3.org/2000/svg" aria-label="逻辑门电路">
+        <!-- 动态生成 -->
+      </svg>
+    </section>
+
+  </div><!-- /.views-grid -->
+
+</main>
+
+<!-- ========================================================
+     页脚
+     ======================================================== -->
+<footer class="page-footer">
+  数字逻辑可视化演示 · 课堂练习3 · 纯原生 HTML + CSS + JavaScript（离线可用）
+</footer>
+
+<!-- ========================================================
+     脚本
+     ======================================================== -->
+<script src="logic.js"></script>
+<script src="render.js"></script>
+<script>
+/**
+ * index.html 初始化脚本
+ * 绑定事件、生成预设按钮、读取 URL 参数
+ */
+
+// ---- 预设按钮 ----
+const presetsRow = document.querySelector(".presets-row");
+PRESETS.forEach(p => {
+  const btn = document.createElement("button");
+  btn.className = "btn";
+  btn.textContent = p.label;
+  btn.title = p.expr;
+  btn.addEventListener("click", () => {
+    document.getElementById("exprInput").value = p.expr;
+    // 直接调用 render.js 中定义的全局 update 函数
+    if (typeof update === "function") update(p.expr);
+  });
+  presetsRow.appendChild(btn);
+});
+
+// ---- 输入框事件 ----
+const exprInput = document.getElementById("exprInput");
+const btnUpdate = document.getElementById("btnUpdate");
+
+btnUpdate.addEventListener("click", () => {
+  if (typeof update === "function") update(exprInput.value);
+});
+
+exprInput.addEventListener("keydown", e => {
+  if (e.key === "Enter" && typeof update === "function") update(exprInput.value);
+});
+
+// ---- URL 参数（支持 ?expr=... 打开指定表达式）----
+function getUrlParam(name) {
+  const params = new URLSearchParams(location.search);
+  return params.get(name);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const urlExpr = getUrlParam("expr");
+  const defaultExpr = urlExpr || "A''B+AB''";
+  exprInput.value = defaultExpr;
+  if (typeof update === "function") update(defaultExpr);
+});
+</script>
+</body>
+</html>

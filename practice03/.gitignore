@@ -1,0 +1,20 @@
+﻿# 课堂练习3：数字逻辑演示页
+# 仅保留源码文件，避免误传图片与编辑器缓存
+
+# 临时与日志
+*.tmp
+*.log
+
+# 编辑器缓存
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
+
+# 环境配置
+.env
+.env.local

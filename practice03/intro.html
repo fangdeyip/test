@@ -1,0 +1,353 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>练习小结 — 课堂练习3</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* intro.html 专用附加样式 */
+    .intro-page { max-width: 820px; margin: 0 auto; padding: 2rem 2.5rem 3rem; }
+    .intro-title {
+      text-align: center;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: .8rem;
+      margin-bottom: 2rem;
+    }
+    .intro-title h1 { font-size: 1.6rem; font-weight: normal; letter-spacing: .1em; }
+    .intro-title p { font-size: .85rem; color: var(--ink-faint); margin-top: .3rem; font-style: italic; }
+
+    .toc {
+      background: var(--paper-alt);
+      border: 1px solid var(--rule);
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .toc ol { padding-left: 1.5rem; }
+    .toc li { margin: .3rem 0; }
+    .toc a { color: var(--accent-b); text-decoration: underline; }
+
+    .section-block {
+      border-left: 3px solid var(--ink);
+      padding-left: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .section-block h2 {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: .7rem;
+      color: var(--accent-b);
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: .3rem;
+    }
+
+    .cmd-block {
+      background: #2a2a2a;
+      color: #d4d4aa;
+      font-family: var(--font-mono);
+      font-size: .85rem;
+      padding: .7rem 1rem;
+      border-left: 4px solid #6a9955;
+      margin: .5rem 0;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .note-box {
+      background: #fffbee;
+      border: 1px solid #e0c060;
+      padding: .7rem 1rem;
+      font-size: .85rem;
+      margin: .7rem 0;
+      color: #7a6000;
+    }
+
+    table.summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .85rem;
+      margin: .7rem 0;
+    }
+    table.summary-table th {
+      background: var(--paper-alt);
+      border: 1px solid var(--rule);
+      padding: .35rem .7rem;
+      text-align: left;
+      font-weight: bold;
+    }
+    table.summary-table td {
+      border: 1px solid var(--rule);
+      padding: .35rem .7rem;
+      vertical-align: top;
+      font-family: var(--font-mono);
+      font-size: .82rem;
+    }
+    table.summary-table tr:hover td { background: var(--highlight); }
+
+    .back-link {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--rule);
+    }
+    .back-link a {
+      display: inline-block;
+      padding: .5rem 1.5rem;
+      border: 2px solid var(--ink);
+      color: var(--ink);
+      text-decoration: none;
+      font-family: var(--font-serif);
+      font-size: .95rem;
+      letter-spacing: .05em;
+      transition: background .15s, color .15s;
+    }
+    .back-link a:hover { background: var(--ink); color: var(--paper); }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1>课堂练习小结</h1>
+</header>
+
+<main class="intro-page">
+
+  <!-- 标题 -->
+  <div class="intro-title">
+    <h1>课堂练习 3</h1>
+    <p>数字逻辑可视化演示页 — 练习过程记录</p>
+  </div>
+
+  <!-- 目录 -->
+  <nav class="toc" aria-label="目录">
+    <strong style="font-size:.9rem;display:block;margin-bottom:.5rem;">目录</strong>
+    <ol>
+      <li><a href="#obj">一、练习目标</a></li>
+      <li><a href="#env">二、环境准备</a></li>
+      <li><a href="#logic">三、数字逻辑基础概念</a></li>
+      <li><a href="#demo">四、演示页开发过程</a></li>
+      <li><a href="#git">五、Git 提交记录</a></li>
+      <li><a href="#summary">六、总结与收获</a></li>
+    </ol>
+  </nav>
+
+  <!-- 一、目标 -->
+  <div class="section-block" id="obj">
+    <h2>一、练习目标</h2>
+    <p>本次练习要求开发一个**纯静态、离线可用**的数字逻辑可视化演示页面，围绕以下五种表示形式进行可视化呈现和交互：</p>
+    <ul style="margin:.5rem 0 .5rem 1.5rem;">
+      <li>布尔表达式（Boolean Expression）</li>
+      <li>真值表（Truth Table）</li>
+      <li>波形图（Waveform / Timing Diagram）</li>
+      <li>卡诺图（Karnaugh Map）</li>
+      <li>逻辑电路图（Logic Circuit Diagram）</li>
+    </ul>
+    <p>核心约束：</p>
+    <ul style="margin:.3rem 0 .3rem 1.5rem;font-size:.9rem;">
+      <li>纯原生 HTML + CSS + JavaScript，不依赖任何 CDN、外网资源或在线 API</li>
+      <li>支持 2 / 3 / 4 变量自动识别</li>
+      <li>五种视图实时联动，任一变量变化其余四视图同步刷新</li>
+      <li>双击即可打开，断网也能正常演示</li>
+      <li>不提交任何图片文件到 git 仓库</li>
+    </ul>
+  </div>
+
+  <!-- 二、环境 -->
+  <div class="section-block" id="env">
+    <h2>二、环境准备</h2>
+    <p>本练习全程在本地完成，无需服务器。主要工具：</p>
+    <table class="summary-table">
+      <tr><th>工具</th><th>用途</th><th>说明</th></tr>
+      <tr><td>浏览器（Chrome/Edge）</td><td>调试与预览</td><td>F12 打开开发者工具，Console 查看 JS 输出</td></tr>
+      <tr><td>文本编辑器</td><td>编写代码</td><td>任何编辑器均可，纯静态文件</td></tr>
+      <tr><td>Git</td><td>版本控制</td><td>提交代码至本地/远程仓库</td></tr>
+      <tr><td>GitHub</td><td>代码托管</td><td>创建仓库，提交练习小结</td></tr>
+    </table>
+    <p style="margin-top:.7rem;font-size:.85rem;color:var(--ink-faint);">注：所有浏览器操作均在本地完成，不依赖任何在线库或 CDN。</p>
+  </div>
+
+  <!-- 三、概念 -->
+  <div class="section-block" id="logic">
+    <h2>三、数字逻辑基础概念</h2>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">1. 基本逻辑运算</h3>
+    <table class="summary-table">
+      <tr><th>运算</th><th>符号</th><th>含义</th><th>口诀</th></tr>
+      <tr><td>与（AND）</td><td>&nbsp;&middot;&nbsp; / &amp;</td><td>全1出1</td><td>有0出0</td></tr>
+      <tr><td>或（OR）</td><td>+</td><td>有1出1</td><td>全0出0</td></tr>
+      <tr><td>非（NOT）</td><td>' / ! / ~</td><td>取反</td><td>0→1, 1→0</td></tr>
+      <tr><td>异或（XOR）</td><td>&oplus;</td><td>不同出1</td><td>相同出0</td></tr>
+    </table>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">2. 布尔代数化简</h3>
+    <p>化简的目标是用最少的门实现同一逻辑功能，主要方法：</p>
+    <ul style="margin:.4rem 0 .4rem 1.5rem;font-size:.88rem;">
+      <li><strong>代数法</strong>：应用吸收律 A+AB=A、A·(A+B)=A 等</li>
+      <li><strong>卡诺图法</strong>：图上圈选相邻"1"格，圈越大项越少</li>
+      <li><strong>Quine-McCluskey 法</strong>：系统化算法，适合计算机实现</li>
+    </ul>
+    <div class="note-box">
+      <strong>素蕴含（Prime Implicant）：</strong>不能再与其他项合并的蕴含项。化简时优先选择本质素蕴含（Essential PI），即被唯一某个小项覆盖的素蕴含。
+    </div>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">3. 五种表示形式的对应关系</h3>
+    <p>同一逻辑函数可以用五种方式等价表示，它们之间存在一一对应的映射关系：</p>
+    <ul style="margin:.3rem 0 .3rem 1.5rem;font-size:.88rem;">
+      <li>布尔表达式 &harr; 真值表（代入变量值直接计算）</li>
+      <li>真值表 &harr; 卡诺图（将输出填入 Gray 码排列的格子）</li>
+      <li>卡诺图圈选化简 &harr; 化简后的布尔表达式</li>
+      <li>布尔表达式 &harr; 逻辑电路图（AND-OR-NOT 门实现）</li>
+      <li>真值表 &harr; 波形图（以时间轴展开各变量的高低电平）</li>
+    </ul>
+  </div>
+
+  <!-- 四、开发过程 -->
+  <div class="section-block" id="demo">
+    <h2>四、演示页开发过程</h2>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">步骤 1：创建目录结构</h3>
+    <div class="cmd-block>practi
+ce-03/
+├── .gitignore       # 过滤编辑器缓存与图片
+├── index.html       # 演示页入口
+├── intro.html       # 练习小结（本页）
+├── style.css        # 纸质教材风样式
+├── logic.js         # 布尔表达式解析与化简引擎
+├── render.js        # 五种视图渲染引擎
+└── README.md        # 项目说明</div>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">步骤 2：编写 .gitignore</h3>
+    <div class="cmd-block"># node 依赖（如果后续用到）
+node_modules/
+
+# 编辑器缓存
+.vscode/
+.idea/
+*.swp
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.log
+*.log*</div>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">步骤 3：核心模块 — logic.js（表达式解析引擎）</h3>
+    <p>实现一个支持以下语法的递归下降解析器：</p>
+    <table class="summary-table">
+      <tr><th>运算符</th><th>含义</th><th>优先级</th></tr>
+      <tr><td>()</td><td>括号</td><td>最高</td></tr>
+      <tr><td>! ~ '</td><td>非（NOT）</td><td>次高</td></tr>
+      <tr><td>&amp; *</td><td>与（AND）</td><td>中等</td></tr>
+      <tr><td>| +</td><td>或（OR）</td><td>较低</td></tr>
+      <tr><td>^</td><td>异或（XOR）</td><td>最低</td></tr>
+    </table>
+    <p style="margin-top:.5rem;">自动识别表达式中的变量（A-Z），支持 1~4 个变量。内置 <strong>Quine-McCluskey 算法</strong>进行化简，输出素蕴含列表。</p>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">步骤 4：核心模块 — render.js（五视图渲染）</h3>
+    <ul style="margin:.3rem 0 .3rem 1.5rem;font-size:.88rem;">
+      <li><strong>真值表</strong>：DOM 表格渲染，点击行高亮，其他视图同步联动</li>
+      <li><strong>波形图</strong>：Canvas 绘制时序图，Gray 码时间轴，鼠标悬停显示步数</li>
+      <li><strong>卡诺图</strong>：Gray 码布局，支持鼠标悬停高亮相邻格，素蕴含悬停高亮整组</li>
+      <li><strong>电路图</strong>：SVG 绘制逻辑门（AND / OR / XOR / NOT / NAND），自动布局</li>
+      <li><strong>表达式面板</strong>：规范化显示原表达式与化简结果</li>
+    </ul>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">步骤 5：样式设计（style.css）</h3>
+    <p>采用<strong>纸质教材风格</strong>，配色参考：</p>
+    <table class="summary-table">
+      <tr><th>元素</th><th>颜色</th><th>说明</th></tr>
+      <tr><td>纸张底色</td><td>#f5f0e8（米黄）</td><td>模拟旧书纸张</td></tr>
+      <tr><td>墨水色</td><td>#1a1a1a（近黑）</td><td>正文、边框</td></tr>
+      <tr><td>批注蓝</td><td>#1a5276（淡蓝）</td><td>链接、面板标题</td></tr>
+      <tr><td>批注红</td><td>#c0392b（淡红）</td><td>当前行高亮、强调</td></tr>
+      <tr><td>批注绿</td><td>#196f3d（墨绿）</td><td>化简结果、素蕴含</td></tr>
+      <tr><td>荧光笔黄</td><td>#fff3b0</td><td>悬停/选中背景</td></tr>
+    </table>
+    <p style="margin-top:.4rem;font-size:.85rem;color:var(--ink-faint);">
+      字体：Georgia / Times New Roman / Noto Serif CJK SC（衬线），Courier New / 等线（等宽）。<br>
+      避免：紫色渐变、玻璃拟态、过度圆角、任何 AI 感的现代 UI 元素。
+    </p>
+  </div>
+
+  <!-- 五、Git -->
+  <div class="section-block" id="git">
+    <h2>五、Git 提交记录</h2>
+    <p>以下为本次练习的主要 Git 命令：</p>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">初始化仓库</h3>
+    <div class="cmd-block">git init
+git add .gitignore
+git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>" -m "chore: add .gitignore"</div>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">提交演示页核心文件</h3>
+    <div class="cmd-block">git add index.html style.css logic.js render.js
+git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>" -m "feat: add digital logic visualization demo
+
+- 支持 2/3/4 变量布尔表达式
+- 五种视图实时联动
+- 纸质教材风格 UI
+- 纯静态，离线可用"</div>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">提交练习小结</h3>
+    <div class="cmd-block">git add intro.html
+git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>" -m "docs: add exercise summary page"</div>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">推送到远程（可选）</h3>
+    <div class="cmd-block">git remote add origin https://github.com/你的用户名/practice-03.git
+git branch -M main
+git push -u origin main</div>
+
+    <div class="note-box">
+      <strong>注意：</strong>仓库大小有限制，<strong>不要提交任何图片文件</strong>（.png / .jpg / .gif 等）。<br>
+      确保 .gitignore 正确配置，避免编辑器缓存（.vscode/）和系统文件（Thumbs.db）进入仓库。
+    </div>
+  </div>
+
+  <!-- 六、总结 -->
+  <div class="section-block" id="summary">
+    <h2>六、总结与收获</h2>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">技术层面</h3>
+    <ul style="margin:.3rem 0 .3rem 1.5rem;font-size:.88rem;">
+      <li>掌握了<strong>布尔代数</strong>的基本运算与化简方法（卡诺图、QM算法）</li>
+      <li>深入理解了<strong>递归下降解析器</strong>的原理与实现</li>
+      <li>练习了 Canvas 绑制时序图、SVG 绑制电路图的技巧</li>
+      <li>巩固了纯静态网页的编写规范（无依赖、离线可用）</li>
+    </ul>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">教学层面</h3>
+    <ul style="margin:.3rem 0 .3rem 1.5rem;font-size:.88rem;">
+      <li>五种表示形式之间的<strong>内在联系</strong>得到了直观呈现</li>
+      <li>点击真值表行或卡诺图格子时，所有视图同步联动，加深了对数字逻辑的整体认识</li>
+      <li>素蕴含的自动提取与高亮，使化简过程可观察、可交互</li>
+    </ul>
+
+    <h3 style="font-size:.95rem;margin:.7rem 0 .4rem;color:var(--ink);">工程层面</h3>
+    <ul style="margin:.3rem 0 .3rem 1.5rem;font-size:.88rem;">
+      <li>遵守了 <strong>.gitignore</strong> 规范，不提交非源代码文件</li>
+      <li>代码结构清晰（logic.js 业务逻辑 / render.js 渲染逻辑 / style.css 样式 / index.html 入口）</li>
+      <li>纯原生实现，不依赖任何外部库，零网络请求</li>
+    </ul>
+
+    <div class="note-box" style="margin-top:1rem;">
+      <strong>演示页地址：</strong>直接双击 <code>index.html</code> 即可打开，断网可用。<br>
+      <strong>练习小结：</strong>即本页，由 <code>index.html</code> 顶部导航链接跳转。
+    </div>
+  </div>
+
+  <!-- 返回链接 -->
+  <div class="back-link">
+    <a href="index.html">← 返回演示页</a>
+  </div>
+
+</main>
+
+<footer class="page-footer">
+  课堂练习3 · 数字逻辑可视化演示 · 2026
+</footer>
+
+</body>
+</html>
